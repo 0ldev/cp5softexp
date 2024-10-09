@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Produto de Vinho - E-commerce</title>
+    <style>
+        /* Estilos CSS */
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background-color: #F7E7CE; /* Champagne beige */
+            color: #7B2A3B; /* Bordeaux red */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Importando fontes elegantes */
+        @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Merriweather:wght@400;700&family=Great+Vibes&display=swap');
+
+        /* Usando fontes elegantes */
+        h1, h2, h3, .product-title {
+            font-family: 'Merriweather', serif;
+        }
+
+        p, li, .price, .winery-name {
+            font-family: 'Lato', sans-serif;
+        }
+
+        /* Cabeçalho */
+        header {
+            background-color: #7B2A3B;
+            color: #F7E7CE;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+        }
+
+        /* Aplicando a fonte "Brush Script" (Great Vibes) ao título */
+        header h1 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 48px;
+            margin: 0;
+        }
+
+        /* Botões no cabeçalho */
+        .header-buttons {
+            position: fixed;
+            top: 20px;
+            right: 30px;
+            display: flex;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .login-button {
+            background-color: #F7E7CE;
+            color: #7B2A3B;
+            padding: 10px 20px;
+            border: 1px solid #7B2A3B;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 15px;
+            text-decoration: none;
+        }
+
+        /* Ícone do Carrinho */
+        .cart-icon {
+            background-color: #7B2A3B;
+            color: #F7E7CE;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 60px;
+            background-color: #F7E7CE;
+            color: #7B2A3B;
+            border: 1px solid #7B2A3B;
+            border-radius: 5px;
+            padding: 15px;
+            width: 300px;
+            z-index: 10;
+        }
+
+        .cart-icon:hover .cart-content {
+            display: block;
+        }
+
+        /* Container principal */
+        .container {
+            display: flex;
+            padding: 120px 20px 20px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Coluna esquerda - Filtros de busca */
+        .left-column {
+            width: 20%;
+            padding-right: 20px;
+            border-right: 1px solid #7B2A3B;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza horizontalmente */
+        }
+
+        /* Barra de busca */
+        .search-bar {
+            margin-bottom: 20px;
+            width: 100%;
+        }
+
+        .search-bar input {
+            width: 80%; /* Ajuste conforme necessário */
+            padding: 10px;
+            border: 1px solid #7B2A3B;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        /* Filtros */
+        .filters {
+            margin-top: 20px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Centraliza horizontalmente */
+        }
+
+        .filters h3 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .filters label {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+            font-size: 16px;
+            width: 80%;
+        }
+
+        .filters input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        /* Coluna central - Detalhes do Produto */
+        .center-column {
+            width: 80%;
+            padding-left: 20px;
+            display: flex;
+        }
+
+        /* Coluna de Imagens */
+        .image-column {
+            width: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center; /* Centraliza horizontalmente */
+            align-items: center;     /* Centraliza verticalmente */
+        }
+
+        .image-column img {
+            width: 100%;
+            max-width: 400px; /* Limita o tamanho máximo da imagem */
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        /* Coluna de Informações */
+        .info-column {
+            width: 50%;
+            padding-left: 40px;
+        }
+
+        .product-title {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .winery-name {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .price {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: #7B2A3B;
+        }
+
+        .add-to-cart {
+            background-color: #7B2A3B;
+            color: #F7E7CE;
+            padding: 15px 30px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .quantity-selector {
+            width: 60px;
+            padding: 5px;
+            font-size: 16px;
+            margin-right: 10px;
+            border: 1px solid #7B2A3B;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        /* Abas */
+        .tabs {
+            margin-top: 30px;
+        }
+
+        .tab {
+            display: none;
+        }
+
+        .tab.active {
+            display: block;
+        }
+
+        .tab-buttons {
+            display: flex;
+            border-bottom: 1px solid #7B2A3B;
+        }
+
+        .tab-buttons button {
+            flex: 1;
+            padding: 10px;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            color: #7B2A3B;
+        }
+
+        .tab-buttons button.active {
+            border-bottom: 2px solid #7B2A3B;
+            font-weight: bold;
+        }
+
+        /* Notas Explicativas/Dicionário */
+        .tooltip {
+            position: relative;
+            cursor: pointer;
+            border-bottom: 1px dotted #7B2A3B;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 220px;
+            background-color: #7B2A3B;
+            color: #F7E7CE;
+            text-align: center;
+            padding: 10px;
+            border-radius: 5px;
+
+            /* Posição do tooltip */
+            position: absolute;
+            z-index: 1;
+            top: 100%;
+            left: 50%;
+            margin-left: -110px;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+        }
+
+        /* Informações Adicionais */
+        .additional-info {
+            margin-top: 30px;
+        }
+
+        .additional-info h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .additional-info p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Avaliações */
+        .reviews {
+            margin-top: 30px;
+        }
+
+        .reviews h3 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .review {
+            margin-bottom: 20px;
+        }
+
+        .review .reviewer {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .review .rating {
+            color: #FFD700; /* Cor dourada para estrelas */
+        }
+
+        /* Rodapé */
+        footer {
+            background-color: #7B2A3B;
+            color: #F7E7CE;
+            padding: 20px;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        /* Design Responsivo */
+        @media screen and (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                padding-top: 100px;
+            }
+
+            .left-column, .center-column {
+                width: 100%;
+                padding: 0;
+            }
+
+            .center-column {
+                flex-direction: column;
+            }
+
+            .info-column {
+                padding-left: 0;
+                margin-top: 20px;
+            }
+
+            .header-buttons {
+                flex-direction: column;
+                top: 10px;
+                right: 10px;
+            }
+
+            .login-button {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Loja de Vinhos</h1>
+    </header>
+
+    <!-- Botões no Cabeçalho -->
+    <div class="header-buttons">
+        <a href="#" class="login-button">Entrar</a>
+        <div class="cart-icon">
+            🛒 Carrinho (<span id="cart-count">0</span>)
+            <div class="cart-content">
+                <p id="cart-items">Seu carrinho está vazio.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Container Principal -->
+    <div class="container">
+
+        <!-- Coluna Esquerda / Filtros de Busca -->
+        <div class="left-column">
+            <!-- Barra de Busca -->
+            <div class="search-bar">
+                <input type="text" placeholder="Buscar vinhos...">
+            </div>
+
+            <!-- Filtros -->
+            <div class="filters">
+                <h3>Filtros</h3>
+                <label><input type="checkbox"> Tinto</label>
+                <label><input type="checkbox"> Branco</label>
+                <label><input type="checkbox"> Rosé</label>
+                <label><input type="checkbox"> Espumante</label>
+                <label><input type="checkbox"> Seco</label>
+                <label><input type="checkbox"> Meio Seco</label>
+                <label><input type="checkbox"> Suave</label>
+                <label><input type="checkbox"> Cabernet Sauvignon</label>
+                <label><input type="checkbox"> Merlot</label>
+                <label><input type="checkbox"> Chardonnay</label>
+                <!-- Adicione mais filtros conforme necessário -->
+            </div>
+        </div>
+
+        <!-- Coluna Central / Detalhes do Produto -->
+        <div class="center-column">
+            <!-- Coluna de Imagens -->
+            <div class="image-column">
+                <img src="wine.png" alt="Vinho" id="main-image">
+            </div>
+
+            <!-- Coluna de Informações -->
+            <div class="info-column">
+                <div class="product-description">
+                    <h2 class="product-title">Château Lafite Rothschild 2015</h2>
+                    <p class="winery-name">Vinícola Château Lafite Rothschild</p>
+                    <p class="price">R$ 5.999,99</p>
+                    <div>
+                        <input type="number" id="quantity" class="quantity-selector" value="1" min="1">
+                        <button class="add-to-cart">Adicionar ao Carrinho</button>
+                    </div>
+                </div>
+
+                <!-- Abas -->
+                <div class="tabs">
+                    <div class="tab-buttons">
+                        <button class="tab-button active" onclick="openTab(event, 'info-basica')">Informações Básicas</button>
+                        <button class="tab-button" onclick="openTab(event, 'info-tecnica')">Informações Técnicas</button>
+                        <button class="tab-button" onclick="openTab(event, 'info-sensorial')">Informações Sensoriais</button>
+                        <button class="tab-button" onclick="openTab(event, 'avaliacoes')">Avaliações</button>
+                    </div>
+
+                    <div id="info-basica" class="tab active">
+                        <p><strong>Tipo de Vinho:</strong> Tinto</p>
+                        <p><strong>Tipo de Uva:</strong> Cabernet Sauvignon, Merlot</p>
+                        <p><strong>Safra:</strong> 2015</p>
+                        <p><strong>Região:</strong> Bordeaux, França</p>
+                    </div>
+
+                    <div id="info-tecnica" class="tab">
+                        <p><strong>Volume da Garrafa:</strong> 750ml</p>
+                        <p><strong>Teor Alcoólico:</strong> 13,5% ABV</p>
+                        <p><strong>Classificação:</strong> <span class="tooltip">Seco<span class="tooltiptext">Vinhos secos possuem pouco ou nenhum açúcar residual.</span></span></p>
+                        <p><strong>Amadurecimento:</strong> 18 meses em barricas novas de carvalho francês</p>
+                    </div>
+
+                    <div id="info-sensorial" class="tab">
+                        <p><strong>Visual:</strong> Cor rubi profundo com alta intensidade</p>
+                        <p><strong>Sabor:</strong> Altos <span class="tooltip">taninos<span class="tooltiptext">Taninos são compostos que adicionam amargor e adstringência.</span></span>, longa persistência, acidez equilibrada</p>
+                        <p><strong>Aroma:</strong> Notas de cassis, cedro e <span class="tooltip">aromas secundários<span class="tooltiptext">Aromas secundários vêm do processo de fermentação.</span></span></p>
+                        <p><strong>Harmonização:</strong> Carnes vermelhas, cordeiro, queijos maturados</p>
+                        <p><strong>Temperatura de Serviço:</strong> 16°C a 18°C</p>
+                    </div>
+
+                    <div id="avaliacoes" class="tab">
+                        <div class="expert-review">
+                            <h3>Avaliação do Especialista</h3>
+                            <p>"Uma safra excepcional com sabores ricos e textura aveludada. Avaliado em 98 pontos." - Wine Spectator</p>
+                        </div>
+                        <div class="buyer-reviews">
+                            <h3>Avaliações dos Compradores</h3>
+                            <div class="review">
+                                <p class="reviewer">João Silva</p>
+                                <p class="rating">★★★★★</p>
+                                <p>"Vinho absolutamente fenomenal. Vale cada centavo."</p>
+                            </div>
+                            <div class="review">
+                                <p class="reviewer">Maria Oliveira</p>
+                                <p class="rating">★★★★☆</p>
+                                <p>"Grande complexidade e profundidade. Imperdível para amantes de Bordeaux."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Informações Adicionais -->
+                <div class="additional-info">
+                    <h3>Sobre as Uvas</h3>
+                    <p><strong>Cabernet Sauvignon:</strong> Conhecida por seu alto teor de taninos e capacidade de envelhecimento, produz vinhos com sabores de cassis e cedro.</p>
+                    <p><strong>Merlot:</strong> Adiciona suavidade e complexidade com sabores de ameixa e cereja.</p>
+
+                    <h3>Região - Bordeaux, França</h3>
+                    <p>Bordeaux é renomada por produzir alguns dos melhores vinhos do mundo, particularmente conhecida por seus blends tintos. O clima e o solo da região contribuem para as características únicas de seus vinhos.</p>
+
+                    <h3>Sobre a Vinícola</h3>
+                    <p>Château Lafite Rothschild é uma das vinícolas mais prestigiadas de Bordeaux, com uma história que remonta ao século XVII. Conhecida por técnicas tradicionais de vinificação e qualidade excepcional.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2023 Loja de Vinhos. Todos os direitos reservados.</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Slideshow das Imagens do Vinho
+        var images = ["wine.png", "wine.png", "wine.png"];
+        var currentImageIndex = 0;
+        var mainImage = document.getElementById('main-image');
+
+        mainImage.addEventListener('click', function() {
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            mainImage.src = images[currentImageIndex];
+        });
+
+        // Funcionalidade das Abas
+        function openTab(evt, tabName) {
+            var i, tabcontent, tabbuttons;
+
+            tabcontent = document.getElementsByClassName("tab");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            tabbuttons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabbuttons.length; i++) {
+                tabbuttons[i].classList.remove("active");
+            }
+
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Funcionalidade de Adicionar ao Carrinho
+        var addToCartBtn = document.querySelector('.add-to-cart');
+        var cartContent = document.querySelector('.cart-content');
+        var cartCount = document.getElementById('cart-count');
+        var cartItems = document.getElementById('cart-items');
+        var totalItems = 0;
+
+        addToCartBtn.addEventListener('click', function() {
+            var quantity = parseInt(document.getElementById('quantity').value);
+            totalItems += quantity;
+            cartCount.textContent = totalItems;
+            cartItems.innerHTML = '<p>' + totalItems + 'x Château Lafite Rothschild 2015 adicionados ao carrinho.</p>';
+        });
+    </script>
+
+</body>
+</html>
